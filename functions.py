@@ -469,12 +469,11 @@ def SpDatagen(N, beta, InvA0, sigmasq):
     y_tilde=np.asmatrix(y_tilde)
     y_tilde=np.reshape(y_tilde,(N,1), order='F')
     y_tilde=y_tilde+MU
-    y=[np.sum(InvA0[j,].toarray()[0,]*y_tilde) for j in range(N)]
-    # y=InvA0@y_tilde
+    y=InvA0.dot(y_tilde)
     # convert X to an array of shape (N,3)
     X=np.array(X)
     # convert y to an array of shape (N, 1)
-    y=np.reshape(y, (N,1))
+    y=np.array(y)
     # combine X and y to get e new array of shape (N,4)
     # first three columns are X and last column is y
     DATA=np.append(X, y, axis=1)
