@@ -115,26 +115,24 @@ def RholistGen(Rho, N):
 
 #%%
 # define a function to calculate Neighborhood mean
-def NMean (J, liN, capN, ylist):
+def NMean (J, capN, ylist):
     # J is the order of the data
-    # liN is the side length of the block
     # capN is the total number of data in one block
-    # this function returns mean of neighbors    
-    reminder=J % capN
-    Before=J-reminder
-    Mean=np.mean([ylist[k+Before] for k in [reminder-1, reminder+1, reminder-liN, reminder+liN] 
+    # this function returns mean of neighbors
+    liN=int(capN**0.5)    
+    Mean=np.mean([ylist[k] for k in [J-1, J+1, J-liN, J+liN] 
                   if (k>=0 and k<capN)])
-    if(reminder%liN==0):
-        Mean=np.mean([ylist[k+Before] for k in [reminder+1, reminder-liN, reminder+liN] 
+    if(J%liN==0):
+        Mean=np.mean([ylist[k] for k in [J+1, J-liN, J+liN] 
                   if (k>=0 and k<capN)])
-    if ((reminder+1)%liN==0):
-        Mean=np.mean([ylist[k+Before] for k in [reminder-1, reminder-liN, reminder+liN] 
+    if ((J+1)%liN==0):
+        Mean=np.mean([ylist[k] for k in [J-1, J-liN, J+liN] 
                   if (k>=0 and k<capN)])
     return(Mean)
 
 #%%
 # define a function up date betaest, rhoest, and sigsqest
-def UPdate (Par, Wdialist, Samples, Sumindex,  liN, capN, LRSGD, J):
+def UPdate (Par, Wdialist, Samples, Sumindex, capN, LRSGD, J):
     # Par is an numpy array with 
     # Par[0:2] is betaest
     # Par[3] is sigsqest
@@ -144,7 +142,6 @@ def UPdate (Par, Wdialist, Samples, Sumindex,  liN, capN, LRSGD, J):
     # Xlist is the list of x-values
     # Wdialist is the list for diagonal element of sum of W^k
     # ylist is the list of y value
-    # liN is the side length of the block
     # capN is the total number of data in one block
     # LRSGD is list of learning rate
     # J is the j-th data in the whole datalist
@@ -163,7 +160,7 @@ def UPdate (Par, Wdialist, Samples, Sumindex,  liN, capN, LRSGD, J):
     # calcuate the jth diagonal element of A inverse
     InvAjj=sum(rholist*Wdialist[J%capN])
     
-    Neighmean=NMean(J=J,liN=liN, capN=capN, ylist=ylist)
+    Neighmean=NMean(J=J, capN=capN, ylist=ylist)
     
     # littlex=np.array(Xlist[J,:])[0]
     littlex=Samples[J, 0:3]
@@ -229,7 +226,7 @@ def UPdateinner(Par, yJ, xJ, LRJ, Neighmean, Wdia, Sumindex, fac):
     Par2[6]=thetaest
     return(Par2)
 
-def UPdateCI (ParCI, CInumber, Wdialist, Sumindex, Samples,  liN, capN, LRSGD, J):
+def UPdateCI (ParCI, CInumber, Wdialist, Sumindex, Samples, capN, LRSGD, J):
     # Par is an numpy array with a length of CInumber*7
     # inside a repeat of 7
     # Par[0:2] is betaest
@@ -240,18 +237,17 @@ def UPdateCI (ParCI, CInumber, Wdialist, Sumindex, Samples,  liN, capN, LRSGD, J
     # Xlist is the list of x-values
     # Wdialist is the list for diagonal element of sum of W^k
     # ylist is the list of y value
-    # liN is the side length of the block
     # capN is the total number of data in one block
     # LRSGD is list of learning rate
     # J is the j-th data in the whole datalist
     # fac is the perturbation factors with default value be 1
 
     ylist=Samples[:,3]
-    Neighmean=NMean(J=J,liN=liN, capN=capN, ylist=ylist)
+    Neighmean=NMean(J=J, capN=capN, ylist=ylist)
     xJ=Samples[J, 0:3]
     yJ=ylist[J]
     LRJ=LRSGD[J]
-    Wdia=Wdialist[J%capN]
+    Wdia=Wdialist[J]
     Parsplit=np.split(ParCI, CInumber)
     # faclist=np.ones(CInumber)
     faclist=np.append(1,np.random.gamma(shape=1.0, scale=1.0, size=(CInumber-1)))
@@ -547,7 +543,7 @@ def UPdateinner2(Par, yJ, xJ, LRJ, Neighmean, Wdia, Sumindex, fac1, fac2):
 # define a function to create CI with different perturbation factor
 # for rho and for beta, sigmasq
 def UPdateCI2 (ParCI, CInumber, Wdialist, Sumindex, Samples,  
-               Scale, Shape, liN, capN, LRSGD, J):
+               Scale, Shape, capN, LRSGD, J):
     # Par is an numpy array with a length of CInumber*7
     # inside a repeat of 7
     # Par[0:2] is betaest
@@ -558,7 +554,6 @@ def UPdateCI2 (ParCI, CInumber, Wdialist, Sumindex, Samples,
     # Xlist is the list of x-values
     # Wdialist is the list for diagonal element of sum of W^k
     # ylist is the list of y value
-    # liN is the side length of the block
     # capN is the total number of data in one block
     # LRSGD is list of learning rate
     # J is the j-th data in the whole datalist
@@ -566,7 +561,7 @@ def UPdateCI2 (ParCI, CInumber, Wdialist, Sumindex, Samples,
     # Gamma distribution for perturbation for rho    
 
     ylist=Samples[:,3]
-    Neighmean=NMean(J=J,liN=liN, capN=capN, ylist=ylist)
+    Neighmean=NMean(J=J,capN=capN, ylist=ylist)
     xJ=Samples[J, 0:3]
     yJ=ylist[J]
     LRJ=LRSGD[J]
