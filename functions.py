@@ -124,6 +124,12 @@ def NMean (J, liN, capN, ylist):
     Before=J-reminder
     Mean=np.mean([ylist[k+Before] for k in [reminder-1, reminder+1, reminder-liN, reminder+liN] 
                   if (k>=0 and k<capN)])
+    if(reminder%liN==0):
+        Mean=np.mean([ylist[k+Before] for k in [reminder+1, reminder-liN, reminder+liN] 
+                  if (k>=0 and k<capN)])
+    if ((reminder+1)%liN==0):
+        Mean=np.mean([ylist[k+Before] for k in [reminder-1, reminder-liN, reminder+liN] 
+                  if (k>=0 and k<capN)])
     return(Mean)
 
 #%%
