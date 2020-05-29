@@ -1,9 +1,4 @@
-import numpy as np
-import random
 from numpy import linalg as LA
-from numpy.linalg import solve, norm
-import pandas as pd
-import math
 from scipy.sparse import lil_matrix
 from scipy.sparse import identity
 #%%
@@ -22,6 +17,7 @@ def norm_neigb (n):
     # n(n-1)+1 n(n-1)+2 n(n-1)+3 ...  n^2
   
     # create a 0 matrix
+    import numpy as np
     M = np.zeros((n**2, n**2))
     # consider only the left and up neighbor for each element
     # when updating the value in matrix
@@ -48,11 +44,13 @@ def norm_neigb (n):
 #%%
 # define a function to load the list
 def loadList(filename):
+    import numpy as np
     # the filename should mention the extension 'npy'
     tempNumpyArray=np.load(filename)
     return tempNumpyArray.tolist()
 # define a function to save list
 def saveList(myList,filename):
+    import numpy as np
     # the filename should mention the extension 'npy'
     np.save(filename,myList)  
 
@@ -66,6 +64,7 @@ def Datagen(N, beta, InvA0, sigmasq):
     # beta is the beta parameter
     # InvA0 is the inverse matrix for spatial dependence
     # sigmasq is the sigma square used for generating data
+    import numpy as np
     x0=np.repeat(1, N)
     x1=np.random.uniform(-1,1, size=N)
     x2=np.random.uniform(-1,1, size=N)
@@ -99,6 +98,7 @@ def DatagenAll(Blocks, N, beta, InvA0, sigmasq):
     # beta is the beta parameter
     # InvA0 is the inverse matrix for spatial dependence
     # sigmasq is the sigma square used for generating data
+    import numpy as np
     Temp=[Datagen(N=N, beta=beta, InvA0=InvA0, sigmasq=sigmasq) 
      for block in range(Blocks)]
     return(np.concatenate(Temp, axis=0))
@@ -108,6 +108,7 @@ def DatagenAll(Blocks, N, beta, InvA0, sigmasq):
 def RholistGen(Rho, N):
     # Rho is the rho value
     # N is the length of the list
+    import numpy as np
     rholist=np.ones(N)
     for k in range(1, N):
         rholist[k]=rholist[k-1]*Rho
@@ -119,6 +120,7 @@ def NMean (J, capN, ylist):
     # J is the order of the data
     # capN is the total number of data in one block
     # this function returns mean of neighbors
+    import numpy as np
     liN=int(capN**0.5)    
     Mean=np.mean([ylist[k] for k in [J-1, J+1, J-liN, J+liN] 
                   if (k>=0 and k<capN)])
@@ -147,6 +149,8 @@ def UPdate (Par, Wdialist, Samples, Sumindex, capN, LRSGD, J):
     # J is the j-th data in the whole datalist
     # fac is the perturbation factors with default value be 1
     
+    import numpy as np
+    import math
     # first calcuate the 
     betaest=Par[0:3]
     sigsqest=Par[3]
@@ -193,6 +197,8 @@ def UPdate (Par, Wdialist, Samples, Sumindex, capN, LRSGD, J):
 # define a update function specificly for CI
 def UPdateinner(Par, yJ, xJ, LRJ, Neighmean, Wdia, Sumindex, fac):
     
+    import numpy as np
+    import math
     betaest=Par[0:3]
     sigsqest=Par[3]
     rhoest=Par[4]
@@ -241,7 +247,8 @@ def UPdateCI (ParCI, CInumber, Wdialist, Sumindex, Samples, capN, LRSGD, J):
     # LRSGD is list of learning rate
     # J is the j-th data in the whole datalist
     # fac is the perturbation factors with default value be 1
-
+    import numpy as np
+    
     ylist=Samples[:,3]
     Neighmean=NMean(J=J, capN=capN, ylist=ylist)
     xJ=Samples[J, 0:3]
@@ -277,6 +284,7 @@ def ComM(A,B,C,D):
     # A, B, C, D are all square matrixes
     # combine them to a whole matrix M
     # M[1,1]=A, M[1,2]=B, M[2,1]=C, M[2,2]=D
+    import numpy as np
     Temp1 = np.concatenate((A, B), 1)
     Temp2 = np.concatenate((C, D), 1)
     Temp=np.concatenate((Temp1, Temp2), 0)
@@ -350,7 +358,7 @@ def norm_neigbblock (n):
     # then we divided into 4 even submatrix
     # return each of the 4 blocks
     # in the order of M[1,1], M[1,2], M[2,1], M[2,2]
-  
+    import numpy as np
     # create a 0 matrix
     Ntotal=n**2
     halfN=int(Ntotal/2)
@@ -416,7 +424,7 @@ def spnorm_neigb (n):
     # .        .        .        ...   .
     # .        .        .        ...   .
     # n(n-1)+1 n(n-1)+2 n(n-1)+3 ...  n^2
-  
+    import numpy as np
     # create a 0 matrix
     # M = np.zeros((n**2, n**2))
     M = lil_matrix((n**2, n**2))
@@ -459,6 +467,7 @@ def SpDatagen(N, beta, InvA0, sigmasq):
     # InvA0 is the inverse matrix for spatial dependence
     # InvA0 is the matrix in the sparse format
     # sigmasq is the sigma square used for generating data
+    import numpy as np
     x0=np.repeat(1, N)
     x1=np.random.uniform(-1,1, size=N)
     x2=np.random.uniform(-1,1, size=N)
@@ -484,6 +493,8 @@ def SpDatagen(N, beta, InvA0, sigmasq):
 #%%
 # create a function to initialize the parameter
 def Init(rho, beta, sigmasq):
+    import numpy as np
+    import math
     # initialized Par
     Par=np.zeros(7)
     # Par[0:3] is betaest, Par[3] is sigsqest, Par[4] is rhoest
@@ -506,7 +517,8 @@ def Init(rho, beta, sigmasq):
 # define a update function specificly for CI
 # use different perturbation parameter for beta, rho, and sigmasquare
 def UPdateinner2(Par, yJ, xJ, LRJ, Neighmean, Wdia, Sumindex, fac1, fac2):
-    
+    import numpy as np
+    import math
     betaest=Par[0:3]
     sigsqest=Par[3]
     rhoest=Par[4]
@@ -559,7 +571,7 @@ def UPdateCI2 (ParCI, CInumber, Wdialist, Sumindex, Samples,
     # J is the j-th data in the whole datalist
     # Scale and Shape are the Scale and Shape parameters for 
     # Gamma distribution for perturbation for rho    
-
+    import numpy as np
     ylist=Samples[:,3]
     Neighmean=NMean(J=J,capN=capN, ylist=ylist)
     xJ=Samples[J, 0:3]
