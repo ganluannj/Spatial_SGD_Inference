@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1617227058478.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "34C18F01",
+    "lastKnownWriteTime" : 1617246138,
+    "last_content_update" : 1617246138174,
+    "path" : "D:/R_Package/SGDCI/R/QuanRegression.R",
+    "project_path" : "R/QuanRegression.R",
+    "properties" : {
+        "cursorPosition" : "228,0",
+        "scrollLine" : "219",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
