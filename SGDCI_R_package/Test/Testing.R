@@ -35,12 +35,13 @@ x<-matrix(c(x1,x2), nrow=N, byrow = FALSE)
 EXP<-exp(beta_0+beta_1*x1+beta_2*x2)
 P<- EXP/(1+EXP)
 yGLM<-ifelse(runif(N)<P,1,0)
+# yGLM<-rbinom
 ySGD<-ifelse(yGLM==1, 1, -1)
 GLM<-glm(yGLM ~ x1 + x2, family='binomial'(link='logit'))
 GLM
 
-LogiSGD(x,ySGD,lr0=0.1, C=2/3, burnin=0.2)
-LogiSGDCI(x,ySGD,lr0=0.1, C=2/3, burnin=0.2, B=200, CI.method = 'sd', per_dis = 'exp')
+LogiSGD(x,ySGD,lr0=0.2, C=2/3, burnin=0.2)
+LogiSGDCI(x,ySGD,lr0=0.2, C=2/3, burnin=0.2, B=200, CI.method = 'sd', per_dis = 'exp')
 
 
 ###########################################################
@@ -64,8 +65,8 @@ Quan.90<-beta_0+beta_1*x1+beta_2*x2
 Lower<-Quan.90-0.9
 Upper<-Quan.90+0.1
 y<-runif(N, Lower, Upper)
-QuanregSGD(x,y, tau=0.9, lr0=0.1, C=2/3, burnin=0.2)
-QuanregSGDCI(x,y,tau=0.9,lr0=0.1, C=2/3, burnin=0.2, B=200, CI.method = 'sd', per_dis = 'exp')
+QuanregSGD(x,y, tau=0.9, lr0=0.2, C=2/3, burnin=0.2)
+QuanregSGDCI(x,y,tau=0.9,lr0=0.2, C=2/3, burnin=0.2, B=200, CI.method = 'sd', per_dis = 'exp')
 # quantile regression using quantreg package
 library(quantreg)
 rq(y ~ x,  tau = 0.9)

@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1620140986270.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "6|56|48|0|\n51|64|128|0|\n135|61|190|0|\n193|81|250|0|\n257|67|280|0|\n286|30|302|0|\n307|29|311|0|\n314|39|321|0|\n323|39|325|0|\n327|25|334|0|\n364|31|375|0|\n",
+    "hash" : "0",
+    "id" : "90970C84",
+    "lastKnownWriteTime" : 1620315902,
+    "last_content_update" : 1620315902675,
+    "path" : "D:/R_Package/SGDCI/R/SARRegression.R",
+    "project_path" : "R/SARRegression.R",
+    "properties" : {
+        "cursorPosition" : "405,0",
+        "scrollLine" : "402",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
